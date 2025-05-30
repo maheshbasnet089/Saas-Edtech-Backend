@@ -13,3 +13,5 @@ function startServer(){
 }
 
 startServer()
+
+//sudo /Applications/XAMPP/xamppfiles/xampp start
