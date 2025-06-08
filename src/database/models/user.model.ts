@@ -19,7 +19,7 @@ class User extends Model{
         type : DataType.STRING, 
    
     })
-    declare username : string 
+    declare userName : string 
 
     @Column({
         type : DataType.STRING

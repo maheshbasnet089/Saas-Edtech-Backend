@@ -19,7 +19,7 @@ RESET PASSWORD/ OTP
 import {Request,Response} from "express"
 import User from "../../../database/models/user.model"
 import bcrypt from "bcrypt"
-
+import jwt from 'jsonwebtoken'
 // json data --> req.body // username,email,password 
 // files --> req.file // files
 // const registerUser = async (req:Request,res:Response)=>{
@@ -48,6 +48,21 @@ import bcrypt from "bcrypt"
 // } // function 
 // BOLA Attack
 
+/*
+login flow : 
+email/username, password (basic)
+email , password -- data accept --> validation --> 
+// first check email exist or not (verify) --> yes --> check password now --> mil0--> 
+token generation (jsonwebtoken)
+
+--> now --> not registered 
+
+
+
+google login, fb, github (oauth)
+email login (SSO)
+
+*/
 
 class AuthController{
    static async registerUser(req:Request,res:Response){
@@ -83,10 +98,56 @@ class AuthController{
          message : "User registered successfully"
      })
    }
+   async loginUser(req:Request,res:Response){
+    const {email,password} = req.body 
+    if(!email || !password){
+        res.status(400).json({
+            message : "Please provide email,password "
+        })
+        return
+    }
+    // check if email exist or not in our users table
+    const data = await User.findAll({
+        where : {
+            email
+        }
+    }) 
+    // select * from User where email="manish@gmail.com" AND age = 22
+    if(data.length ==0){
+        res.status(404).json({
+            message : "Not registered!!"
+        })
+    }else{
+        // check password , nepal123 --> hash conversion --> fsdkjfsdfjsd
+        // compare(plain password user bata aako password, hashed password register huda table ma baseko)
+         const isPasswordMatch = bcrypt.compareSync(password,data[0].password)
+         if(isPasswordMatch){
+            // login vayo , token generation 
+           const token =  jwt.sign({id :data[0].id },"thisissecrethai",{
+                expiresIn : "90d"
+            })
+            res.json({
+                token : token
+            })
+         }else{
+            res.status(403).json({
+                message : "Invalid email or password"
+            })
+         }
+
+    }
+   }
+   
 }
+
+
 
 export default AuthController
 
 
 // export  {registerUser}
 
+
+
+// token(jwt), session
+// cookie, localstorage
