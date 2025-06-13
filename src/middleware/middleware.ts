@@ -3,22 +3,24 @@ import jwt from 'jsonwebtoken'
 import User from "../database/models/user.model"
 
 interface IExtendedRequest extends Request{
-   user : {
-    name : string , 
-    age : number
+   user ?: {
+    email : string, 
+    role : string, 
+    userName : string | null
    }
 }
 
-const isLoggedIn = (req:IExtendedRequest,res:Response,next:NextFunction):Promise<void>=>{
+const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction):Promise<void>=>{
     // check if login or not 
     // token accept 
-    const name = "manish basnet"
+
     const token = req.headers.authorization //jwt eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30
-    console.log(token,"TOKEN")
+
     if(!token){
-       return res.status(401).json({
+        res.status(401).json({
             message : "please provide token"
         })
+        return
         
     }
     // verify garne 
@@ -41,12 +43,11 @@ const isLoggedIn = (req:IExtendedRequest,res:Response,next:NextFunction):Promise
                     message : "No user with that id, invalid token "
                 })
             }else{
-                req.user.name = name
-                req.user.age = 23
+                req.user = userData
+                next()
             }
         }
     })
-    next()
 }
 
 // class Middleware{

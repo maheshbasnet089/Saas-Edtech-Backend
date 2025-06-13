@@ -10,7 +10,7 @@ import isLoggedIn from "../../middleware/middleware"
 
 const router:Router = express.Router()
 
-router.route("/").post(isLoggedIn, createInstitute)
+router.route("/").post(isLoggedIn, createInstitute,createTeacherTable,createStudentTable)
 
 
 export default router

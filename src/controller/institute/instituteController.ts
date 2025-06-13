@@ -1,18 +1,18 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import sequelize from "../../database/connection";
 import generateRandomInsituteNumber from "../../services/generateRandomInsituteNumber";
 
 
 interface IExtendedRequest extends Request{
-    user : {
+    user?: {
         name : string, 
         age : number 
     }
 }
 
-const createInstitute = async (req:IExtendedRequest,res:Response)=>{
+const createInstitute = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
         // console.log("Triggered")
-        console.log(req.user.name, req.user.age)
+        console.log(req.user ,"Name from middleware")
         const {instituteName,instituteEmail,institutePhoneNumber,instituteAddress} = req.body 
         const instituteVatNo = req.body.instituteVatNo || null 
         const institutePanNo = req.body.institutePanNo || null
@@ -43,11 +43,8 @@ const createInstitute = async (req:IExtendedRequest,res:Response)=>{
             replacements : [instituteName,instituteEmail,institutePhoneNumber,instituteAddress,institutePanNo,instituteVatNo]
         })
 
-
         
-        res.status(200).json({
-            message : "Institute created!"
-        })
+        next()
     }
 
 
