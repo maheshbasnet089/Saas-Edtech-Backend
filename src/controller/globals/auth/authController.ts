@@ -143,7 +143,7 @@ class AuthController{
          const isPasswordMatch = bcrypt.compareSync(password,data[0].password)
          if(isPasswordMatch){
             // login vayo , token generation 
-           const token =  jwt.sign({id :data[0].id,name:"manish"},'thisissecret',{
+           const token =  jwt.sign({id :data[0].id},'thisissecret',{
             expiresIn : "30d"
            })
             res.status(200).json({

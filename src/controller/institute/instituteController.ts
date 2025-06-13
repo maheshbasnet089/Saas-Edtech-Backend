@@ -3,10 +3,16 @@ import sequelize from "../../database/connection";
 import generateRandomInsituteNumber from "../../services/generateRandomInsituteNumber";
 
 
+interface IExtendedRequest extends Request{
+    user : {
+        name : string, 
+        age : number 
+    }
+}
 
-
-const createInstitute = async (req:Request,res:Response)=>{
+const createInstitute = async (req:IExtendedRequest,res:Response)=>{
         // console.log("Triggered")
+        console.log(req.user.name, req.user.age)
         const {instituteName,instituteEmail,institutePhoneNumber,instituteAddress} = req.body 
         const instituteVatNo = req.body.instituteVatNo || null 
         const institutePanNo = req.body.institutePanNo || null
@@ -37,12 +43,7 @@ const createInstitute = async (req:Request,res:Response)=>{
             replacements : [instituteName,instituteEmail,institutePhoneNumber,instituteAddress,institutePanNo,instituteVatNo]
         })
 
-        await sequelize.query(`CREATE TABLE teacher_${instituteNumber}(
-            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
-            teacherName VARCHAR(255) NOT NULL, 
-            teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
-            teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE
-            )`)
+
         
         res.status(200).json({
             message : "Institute created!"
@@ -50,8 +51,13 @@ const createInstitute = async (req:Request,res:Response)=>{
     }
 
 
-// const createTeacherTable = (req:Request,res:Response)=>{
-//     req.user.instituteNumber
+const createTeacherTable = (req:Request,res:Response)=>{
+            // await sequelize.query(`CREATE TABLE teacher_${instituteNumber}(
+            // id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+            // teacherName VARCHAR(255) NOT NULL, 
+            // teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
+            // teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE
+            // )`)
    
-// }
+}
 export default createInstitute
