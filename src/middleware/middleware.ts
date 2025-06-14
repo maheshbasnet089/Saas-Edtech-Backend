@@ -1,19 +1,28 @@
 import { NextFunction, Request, Response } from "express"
 import jwt from 'jsonwebtoken'
 import User from "../database/models/user.model"
+import { IExtendedRequest } from "./type"
 
-interface IExtendedRequest extends Request{
-   user ?: {
-    email : string, 
-    role : string, 
-    userName : string | null
-   }
-}
+const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
 
-const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction):Promise<void>=>{
+  /*
+   req =  {
+  body : ""
+  headers : "", 
+  contenttype : "", 
+  name : "manish", 
+  user : {
+  email : "manish", 
+  role : "admin", 
+
+  }
+  }
+
+  req.
+
+  */
     // check if login or not 
     // token accept 
-
     const token = req.headers.authorization //jwt eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30
 
     if(!token){
@@ -38,6 +47,14 @@ const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction):P
         //         }
         //     })
             const userData = await User.findByPk(resultaayo.id)
+            /*
+
+            userData = {
+                username : "", 
+                password : "", 
+                email : "", 
+                            }
+            */
             if(!userData){
                 res.status(403).json({
                     message : "No user with that id, invalid token "

@@ -1,14 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import sequelize from "../../database/connection";
 import generateRandomInsituteNumber from "../../services/generateRandomInsituteNumber";
+import { IExtendedRequest } from "../../middleware/type";
 
 
-interface IExtendedRequest extends Request{
-    user?: {
-        name : string, 
-        age : number 
-    }
-}
+
 
 const createInstitute = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
         // console.log("Triggered")
@@ -27,11 +23,11 @@ const createInstitute = async (req:IExtendedRequest,res:Response,next:NextFuncti
         // institute (name)
 
         const instituteNumber =   generateRandomInsituteNumber()  
-       await sequelize.query(`CREATE TABLE IF NOT EXISTS institute_${instituteNumber} (
+       await sequelize.query(`CREATE TABLE IF NOT EXISTS institute_${institutePanNo || instituteVatNo} (
             id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
             instituteName VARCHAR(255) NOT NULL, 
-            instituteEmail VARCHAR(255) NOT NULL UNIQUE, 
-            institutePhoneNumber VARCHAR(255) NOT NULL UNIQUE, 
+            instituteEmail VARCHAR(255) NOT NULL , 
+            institutePhoneNumber VARCHAR(255) NOT NULL , 
             instituteAddress VARCHAR(255) NOT NULL, 
             institutePanNo VARCHAR(255), 
             instituteVatNo VARCHAR(255), 
