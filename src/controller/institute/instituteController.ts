@@ -20,7 +20,7 @@ const createInstitute = async (req:IExtendedRequest,res:Response,next:NextFuncti
             })
             return
         }
-
+//test
 
         // User.findByPk(req.user && req.user.id)
         // aayo vane - insitute create garnu paryo --> insitute_123123, course_123132 
