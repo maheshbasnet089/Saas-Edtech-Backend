@@ -66,6 +66,7 @@ email login (SSO)
 
 class AuthController{
    static async registerUser(req:Request,res:Response){
+   
     if(req.body == undefined){
         console.log("triggereed")
         res.status(400).json({
