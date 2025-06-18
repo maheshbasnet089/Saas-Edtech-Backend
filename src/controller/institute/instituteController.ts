@@ -3,14 +3,15 @@ import sequelize from "../../database/connection";
 import generateRandomInsituteNumber from "../../services/generateRandomInsituteNumber";
 import { IExtendedRequest } from "../../middleware/type";
 import User from "../../database/models/user.model";
+import asyncErrorHandler from "../../services/asyncErrorHandler";
 
 
 
 
-const createInstitute = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
+const createInstitute =  async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
         // console.log("Triggered")
      
-      try {
+    
         const {instituteName,instituteEmail,institutePhoneNumber,instituteAddress} = req.body 
         const instituteVatNo = req.body.instituteVatNo || null 
         const institutePanNo = req.body.institutePanNo || null
@@ -20,7 +21,7 @@ const createInstitute = async (req:IExtendedRequest,res:Response,next:NextFuncti
             })
             return
         }
-
+//test
 
         // User.findByPk(req.user && req.user.id)
         // aayo vane - insitute create garnu paryo --> insitute_123123, course_123132 
@@ -68,26 +69,22 @@ const createInstitute = async (req:IExtendedRequest,res:Response,next:NextFuncti
                 }
             })
           }
-         req.instituteNumber = instituteNumber  
-        // req.user?.instituteNumber = instituteNumber; 
+        req.user.currentInstituteNumber = instituteNumber; 
         next()
-      } catch (error) {
-        console.log(error)
-      }
+   
+        
+      
     }
+
 
 const createTeacherTable = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
           
-            const instituteNumber = req.instituteNumber
+            const instituteNumber = req.user.currentInstituteNumber
             await sequelize.query(`CREATE TABLE IF NOT EXISTS teacher_${instituteNumber}(
             id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
             teacherName VARCHAR(255) NOT NULL, 
             teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
-            teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE, 
-            expertise TEXT, 
-            joinedDate DATE, 
-            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-            updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
+            teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE
             )`)
             next()
        
@@ -95,29 +92,22 @@ const createTeacherTable = async (req:IExtendedRequest,res:Response,next:NextFun
 }
 
 const createStudentTable = async(req:IExtendedRequest,res:Response,next:NextFunction)=>{
-    const instituteNumber = req.instituteNumber
+    const instituteNumber = req.user.currentInstituteNumber
     await sequelize.query(`CREATE TABLE IF NOT EXISTS student_${instituteNumber}(
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
         studentName VARCHAR(255) NOT NULL, 
-        studentPhoneNo VARCHAR(255) NOT NULL UNIQUE, 
-        address TEXT, 
-        enrolledDate DATE, 
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        studentPhoneNo VARCHAR(255) NOT NULL UNIQUE
         )`)
     next()
 }
 
 const createCourseTable = async(req:IExtendedRequest,res:Response)=>{
-    const instituteNumber = req.instituteNumber 
+
+    const instituteNumber = req.user.currentInstituteNumber 
     await sequelize.query(`CREATE TABLE IF NOT EXISTS course_${instituteNumber}(
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         courseName VARCHAR(255) NOT NULL UNIQUE, 
-        coursePrice VARCHAR(255) NOT NULL, 
-        duration VARCHAR(100), 
-        level ENUM('beginner','intermediate','advanced'), 
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
+        coursePrice VARCHAR(255) NOT NULL
         )`)
 
         res.status(200).json({
@@ -125,4 +115,6 @@ const createCourseTable = async(req:IExtendedRequest,res:Response)=>{
             instituteNumber, 
         })
 }
+
+
 export  {createInstitute,createTeacherTable,createStudentTable,createCourseTable}

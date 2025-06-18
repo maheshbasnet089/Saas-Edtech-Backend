@@ -3,12 +3,9 @@ import { Request } from "express";
 
 
 export interface IExtendedRequest extends Request{
-       user ?: {
+       user : {
        id : string,
-        email : string, 
-        role : string, 
-        userName : string | null
-       }, 
-       instituteNumber ?: number | string
+       currentInstituteNumber : string | number | null
+       }
       
 }
