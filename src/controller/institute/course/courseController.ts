@@ -17,8 +17,6 @@ const returnedData = await sequelize.query(`INSERT INTO course_${instituteNumber
     replacements : [coursePrice, courseName,courseDescription,courseDuration,courseLevel,courseThumbnail || "https://digitalpathshalanepal.com/image/hello.png"]
 })
 
-
-
 res.status(200).json({
     message : 'course created successfully'
 })
