@@ -4,6 +4,7 @@ import generateRandomInsituteNumber from "../../services/generateRandomInsituteN
 import { IExtendedRequest } from "../../middleware/type";
 import User from "../../database/models/user.model";
 import asyncErrorHandler from "../../services/asyncErrorHandler";
+import categories from "../../seed";
 
 
 
@@ -151,6 +152,26 @@ const createCourseTable = async(req:IExtendedRequest,res:Response)=>{
         })
 }
 
+const createCategoryTable = async(req:IExtendedRequest,res:Response,next:NextFunction)=>{
+    const instituteNumber = req.user?.currentInstituteNumber 
+    await sequelize.query(`CREATE TABLE IF NOT EXISTS category_${instituteNumber}(
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+        categoryName VARCHAR(100) NOT NULL, 
+        categoryDescription TEXT,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )`)
+
+        categories.forEach(async function(category){
+            await sequelize.query(`INSERT INTO category_${instituteNumber}(categoryName,categoryDescription) VALUES(?,?)`,{
+                replacements : [category.categoryName,category.categoryDescription]
+            })
+
+        })
+        next()
+
+}
 
 
-export  {createInstitute,createTeacherTable,createStudentTable,createCourseTable}
+
+export  {createInstitute,createTeacherTable,createStudentTable,createCourseTable,createCategoryTable}
