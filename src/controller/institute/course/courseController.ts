@@ -11,12 +11,13 @@ const createCourse = async (req:IExtendedRequest,res:Response)=>{
         messsage : "Please provide coursePrice, courseName, courseDescription, courseDuration, courseLevel"
     })
     }
-const courseThumbnail = null
+const courseThumbnail = req.file ? req.file.path  : null
+console.log(courseThumbnail)
 
 const returnedData = await sequelize.query(`INSERT INTO course_${instituteNumber}(coursePrice,courseName,courseDescription,courseDuration,courseLevel,courseThumbnail) VALUES(?,?,?,?,?,?)`,{
     replacements : [coursePrice, courseName,courseDescription,courseDuration,courseLevel,courseThumbnail || "https://digitalpathshalanepal.com/image/hello.png"]
 })
-
+ 
 res.status(200).json({
     message : 'course created successfully'
 })

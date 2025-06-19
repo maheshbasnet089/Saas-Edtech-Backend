@@ -61,6 +61,7 @@ const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>
                     message : "No user with that id, invalid token "
                 })
             }else{
+
                 req.user = userData
                 next()
             }
@@ -115,4 +116,4 @@ const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>
 // }
 
 
-export  {isLoggedIn}
+export  default isLoggedIn
