@@ -8,7 +8,7 @@ import asyncErrorHandler from "../../services/asyncErrorHandler";
 
 
 
-const createInstitute = asyncErrorHandler( async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
+const createInstitute =  async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
         // console.log("Triggered")
      
     
@@ -69,20 +69,24 @@ const createInstitute = asyncErrorHandler( async (req:IExtendedRequest,res:Respo
                 }
             })
           }
-         req.instituteNumber = instituteNumber  
+     
+          if(req.user){
+              req.user.currentInstituteNumber = instituteNumber  
+          }
+          
         // req.user?.instituteNumber = instituteNumber; 
         next()
    
         
       
     }
-)
+
 
 
 const createTeacherTable = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
          
             
-              const instituteNumber = req.instituteNumber
+              const instituteNumber = req.user?.currentInstituteNumber
               await sequelize.query(`CREATE TABLE IF NOT EXISTS teacher_${instituteNumber}(
               id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
               teacherName VARCHAR(255) NOT NULL, 
@@ -104,7 +108,7 @@ const createStudentTable = async(req:IExtendedRequest,res:Response,next:NextFunc
     
    
        try {
-        const instituteNumber = req.instituteNumber
+        const instituteNumber = req.user?.currentInstituteNumber
         await sequelize.query(`CREATE TABLE IF NOT EXISTS student_${instituteNumber}(
             id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
             studentName VARCHAR(255) NOT NULL, 
@@ -128,7 +132,7 @@ const createStudentTable = async(req:IExtendedRequest,res:Response,next:NextFunc
 
 const createCourseTable = async(req:IExtendedRequest,res:Response)=>{
 
-    const instituteNumber = req.instituteNumber 
+    const instituteNumber = req.user?.currentInstituteNumber 
     await sequelize.query(`CREATE TABLE IF NOT EXISTS course_${instituteNumber}(
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         courseName VARCHAR(255) NOT NULL UNIQUE, 
