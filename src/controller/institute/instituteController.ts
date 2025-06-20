@@ -30,7 +30,7 @@ const createInstitute =  async (req:IExtendedRequest,res:Response,next:NextFunct
 
         const instituteNumber =   generateRandomInsituteNumber()  
        await sequelize.query(`CREATE TABLE IF NOT EXISTS institute_${instituteNumber} (
-            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+            id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
             instituteName VARCHAR(255) NOT NULL, 
             instituteEmail VARCHAR(255) NOT NULL , 
             institutePhoneNumber VARCHAR(255) NOT NULL , 
@@ -89,7 +89,7 @@ const createTeacherTable = async (req:IExtendedRequest,res:Response,next:NextFun
             
               const instituteNumber = req.user?.currentInstituteNumber
               await sequelize.query(`CREATE TABLE IF NOT EXISTS teacher_${instituteNumber}(
-              id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+               id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()), 
               teacherName VARCHAR(255) NOT NULL, 
               teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
               teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE,
@@ -111,7 +111,7 @@ const createStudentTable = async(req:IExtendedRequest,res:Response,next:NextFunc
        try {
         const instituteNumber = req.user?.currentInstituteNumber
         await sequelize.query(`CREATE TABLE IF NOT EXISTS student_${instituteNumber}(
-            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+             id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
             studentName VARCHAR(255) NOT NULL, 
             studentPhoneNo VARCHAR(255) NOT NULL UNIQUE, 
             studentAddress TEXT, 
@@ -135,13 +135,14 @@ const createCourseTable = async(req:IExtendedRequest,res:Response)=>{
 
     const instituteNumber = req.user?.currentInstituteNumber 
     await sequelize.query(`CREATE TABLE IF NOT EXISTS course_${instituteNumber}(
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
         courseName VARCHAR(255) NOT NULL UNIQUE, 
         coursePrice VARCHAR(255) NOT NULL, 
         courseDuration VARCHAR(100) NOT NULL, 
         courseLevel ENUM('beginner','intermediate','advance') NOT NULL, 
         courseThumbnail VARCHAR(200),
         courseDescription TEXT, 
+        categoryId VARCHAR(36) NOT NULL REFERENCES category_${instituteNumber} (id), 
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )`)
@@ -155,7 +156,7 @@ const createCourseTable = async(req:IExtendedRequest,res:Response)=>{
 const createCategoryTable = async(req:IExtendedRequest,res:Response,next:NextFunction)=>{
     const instituteNumber = req.user?.currentInstituteNumber 
     await sequelize.query(`CREATE TABLE IF NOT EXISTS category_${instituteNumber}(
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+        id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
         categoryName VARCHAR(100) NOT NULL, 
         categoryDescription TEXT,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
