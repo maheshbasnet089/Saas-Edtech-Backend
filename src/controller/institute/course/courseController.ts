@@ -10,12 +10,12 @@ const createCourse = async (req:IExtendedRequest,res:Response)=>{
     return res.status(400).json({
         messsage : "Please provide coursePrice, courseName, courseDescription, courseDuration, courseLevel"
     })
-    }
-const courseThumbnail = req.file ? req.file.path  : null
-console.log(courseThumbnail)
+}
+
+const courseThumbnail = req.file ? req.file.path : null
 
 const returnedData = await sequelize.query(`INSERT INTO course_${instituteNumber}(coursePrice,courseName,courseDescription,courseDuration,courseLevel,courseThumbnail) VALUES(?,?,?,?,?,?)`,{
-    replacements : [coursePrice, courseName,courseDescription,courseDuration,courseLevel,courseThumbnail || "https://digitalpathshalanepal.com/image/hello.png"]
+    replacements : [coursePrice, courseName,courseDescription,courseDuration,courseLevel,courseThumbnail]
 })
  
 res.status(200).json({
@@ -48,10 +48,12 @@ const deleteCourse = async(req:IExtendedRequest,res:Response)=>{
 
 const getAllCourse = async (req:IExtendedRequest,res:Response)=>{
     const instituteNumber = req.user?.currentInstituteNumber; 
+    const datas = await sequelize.query(`SHOW TABLES LIKE 'course_%';`)
     const courses = await sequelize.query(`SELECT * FROM course_${instituteNumber}`)
     res.status(200).json({
         message : "Course fetched", 
-        data : courses 
+        data : courses, 
+        datas
     })
 }
 
