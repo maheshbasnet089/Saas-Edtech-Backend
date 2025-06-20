@@ -4,7 +4,7 @@ import User from "../database/models/user.model"
 import { IExtendedRequest } from "./type"
 
 const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
-
+ console.log("triggered")
   /*
    req =  {
   body : ""
