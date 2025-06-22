@@ -82,7 +82,7 @@ const createInstitute =  async (req:IExtendedRequest,res:Response,next:NextFunct
       
     }
 
-
+// mysql doesn't support array like mongodb 
 
 const createTeacherTable = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
               const instituteNumber = req.user?.currentInstituteNumber
@@ -94,6 +94,9 @@ const createTeacherTable = async (req:IExtendedRequest,res:Response,next:NextFun
               teacherExpertise VARCHAR(255), 
               joinedDate DATE, 
               salary VARCHAR(100),
+              teacherPhoto VARCHAR(255), 
+              teacherPassword VARCHAR(255),
+              courseId VARCHAR(100) REFERENCES course_${instituteNumber}(id),
               createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
               updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
               )`)
@@ -137,6 +140,7 @@ const createCourseTable = async(req:IExtendedRequest,res:Response)=>{
         courseLevel ENUM('beginner','intermediate','advance') NOT NULL, 
         courseThumbnail VARCHAR(200),
         courseDescription TEXT, 
+        teacherId VARCHAR(36) REFERENCES teacher_${instituteNumber}(id), 
         categoryId VARCHAR(36) NOT NULL REFERENCES category_${instituteNumber} (id), 
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
