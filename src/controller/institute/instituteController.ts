@@ -5,6 +5,7 @@ import { IExtendedRequest } from "../../middleware/type";
 import User from "../../database/models/user.model";
 import asyncErrorHandler from "../../services/asyncErrorHandler";
 import categories from "../../seed";
+import sendMail from "../../services/sendMail";
 
 
 
@@ -74,7 +75,7 @@ const createInstitute =  async (req:IExtendedRequest,res:Response,next:NextFunct
           if(req.user){
               req.user.currentInstituteNumber = instituteNumber  
           }
-          
+        
         // req.user?.instituteNumber = instituteNumber; 
         next()
    

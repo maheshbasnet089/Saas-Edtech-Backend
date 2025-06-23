@@ -3,6 +3,7 @@ import { IExtendedRequest } from "../../../middleware/type";
 import sequelize from "../../../database/connection";
 import { QueryTypes } from "sequelize";
 import generateRandomPassword from "../../../services/generateRandomPassword";
+import sendMail from "../../../services/sendMail";
 
 
 const createTeacher = async(req:IExtendedRequest,res:Response)=>{
@@ -26,14 +27,19 @@ const createTeacher = async(req:IExtendedRequest,res:Response)=>{
         type : QueryTypes.SELECT, 
         replacements : [teacherEmail]
     })
-    console.log(teacherData,"teacher data")
+
     await sequelize.query(`UPDATE course_${instituteNumber} SET teacherId=? WHERE id=?`,{
         type : QueryTypes.UPDATE,
         replacements : [teacherData[0].id,courseId]
     })
 
     // send mail function goes here 
-
+    const mailInformation = {
+        to : teacherEmail, 
+        subject : "Welcome to our saas MERN project", 
+        text : `Welcome xa hai, Email : ${teacherEmail}, Password : ${data.plainVersion}`
+    }
+    await sendMail(mailInformation)
 
     res.status(200).json({
         message : "teacher created"
