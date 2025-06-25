@@ -3,9 +3,7 @@ import sequelize from "../../database/connection";
 import generateRandomInsituteNumber from "../../services/generateRandomInsituteNumber";
 import { IExtendedRequest } from "../../middleware/type";
 import User from "../../database/models/user.model";
-import asyncErrorHandler from "../../services/asyncErrorHandler";
 import categories from "../../seed";
-import sendMail from "../../services/sendMail";
 
 
 
