@@ -92,7 +92,7 @@ class AuthController{
 //     }
      // insert into Users table 
      await User.create({
-         username :username, 
+         userName :username, 
          password : bcrypt.hashSync(password,12), //blowfish
          email : email
      })
@@ -147,7 +147,10 @@ class AuthController{
             // login vayo , token generation 
          const token = generateJWTToken({id:data[0].id})
             res.status(200).json({
-                token : token, 
+                data : {
+                    token : token, 
+                    username : data[0].userName
+                },
                 message : "Logged in success"
             })
          }else{
