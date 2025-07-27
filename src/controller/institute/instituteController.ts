@@ -90,7 +90,7 @@ const createTeacherTable = async (req:IExtendedRequest,res:Response,next:NextFun
               teacherName VARCHAR(255) NOT NULL, 
               teacherEmail VARCHAR(255) NOT NULL UNIQUE, 
               teacherPhoneNumber VARCHAR(255) NOT NULL UNIQUE,
-              teacherExpertise VARCHAR(255), 
+              teacherExperience VARCHAR(255), 
               joinedDate DATE, 
               salary VARCHAR(100),
               teacherPhoto VARCHAR(255), 
