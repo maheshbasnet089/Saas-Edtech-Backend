@@ -18,9 +18,9 @@ const createTeacher = async(req:IExtendedRequest,res:Response)=>{
     }
     // password generate functionnn 
     const data = generateRandomPassword(teacherName)
-    const insertedData =  await sequelize.query(`INSERT INTO teacher_${instituteNumber}(teacherName,teacherEmail,teacherPhoneNumber,teacherExperience,joinedDate,salary,teacherPhoto,teacherPassword) VALUES(?,?,?,?,?,?,?,?)`,{
+    const insertedData =  await sequelize.query(`INSERT INTO teacher_${instituteNumber}(teacherName,teacherEmail,teacherPhoneNumber,teacherExperience,joinedDate,salary,teacherPhoto,teacherPassword, courseId) VALUES(?,?,?,?,?,?,?,?,?)`,{
         type : QueryTypes.INSERT, 
-        replacements : [teacherName,teacherEmail,teacherPhoneNumber,teacherExperience,teacherJoinedDate,teacherSalary,teacherPhoto,data.hashedVersion]
+        replacements : [teacherName,teacherEmail,teacherPhoneNumber,teacherExperience,teacherJoinedDate,teacherSalary,teacherPhoto,data.hashedVersion, courseId]
     })
 
     const teacherData : {id:string}[]= await sequelize.query(`SELECT id FROM teacher_${instituteNumber} WHERE teacherEmail=?`,{
@@ -28,10 +28,10 @@ const createTeacher = async(req:IExtendedRequest,res:Response)=>{
         replacements : [teacherEmail]
     })
 
-    await sequelize.query(`UPDATE course_${instituteNumber} SET teacherId=? WHERE id=?`,{
-        type : QueryTypes.UPDATE,
-        replacements : [teacherData[0].id,courseId]
-    })
+    // await sequelize.query(`UPDATE course_${instituteNumber} SET teacherId=? WHERE id=?`,{
+    //     type : QueryTypes.UPDATE,
+    //     replacements : [teacherData[0].id,courseId]
+    // })
 
     // send mail function goes here 
     const mailInformation = {
@@ -49,7 +49,7 @@ const createTeacher = async(req:IExtendedRequest,res:Response)=>{
 
 const getTeachers = async(req:IExtendedRequest,res:Response)=>{
     const instituteNumber = req.user?.currentInstituteNumber; 
-    const teachers = await sequelize.query(`SELECT * FROM teacher_${instituteNumber}`,{
+    const teachers = await sequelize.query(`SELECT t.*,c.courseName FROM teacher_${instituteNumber} AS t JOIN course_${instituteNumber} AS c ON t.courseId = c.id`,{
         type : QueryTypes.SELECT
     })
     res.status(200).json({

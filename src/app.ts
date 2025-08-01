@@ -14,7 +14,7 @@ app.use(express.json())
 
 // cors config 
 app.use(cors({
-    origin : "http://localhost:3000"
+    origin : ["http://localhost:3000","http://localhost:3001"]
 }))
 //GLOBAL ROUTE
 app.use("/api/auth",authRoute)
