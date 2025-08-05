@@ -102,6 +102,23 @@ const createTeacherTable = async (req:IExtendedRequest,res:Response,next:NextFun
               next()
 }
 
+
+// teacher-chapter 
+const createCourseChapterTable = async(req:IExtendedRequest,res:Response,next:NextFunction)=>{
+     const instituteNumber = req.user?.currentInstituteNumber
+     await sequelize.query(`CREATE TABLE IF NOT EXISTS course_chapter_${instituteNumber}(
+        id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()), 
+        chapterName VARCHAR(255) NOT NULL, 
+        chapterDuration VARCHAR(100) NOT NULL, 
+        chapterLevel ENUM('beginner','intermediate','advance') NOT NULL, 
+        courseId VARCHAR(36) REFERENCES course_${instituteNumber}(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
+        )`)
+    next()
+}
+
+
 const createStudentTable = async(req:IExtendedRequest,res:Response,next:NextFunction)=>{
     
    
@@ -173,4 +190,4 @@ const createCategoryTable = async(req:IExtendedRequest,res:Response,next:NextFun
 
 
 
-export  {createInstitute,createTeacherTable,createStudentTable,createCourseTable,createCategoryTable}
+export  {createInstitute,createTeacherTable,createStudentTable,createCourseTable,createCategoryTable,createCourseChapterTable}

@@ -41,9 +41,13 @@ const teacherLogin = async(req:Request,res:Response)=>{
   }else{
     // token generation
    const token =  generateJWTToken({id : teacherData[0].id,instituteNumber: teacherInstituteNumber})
-   res.status(200).json({
+   res.status(201).json({
     message : "Teacher logged in", 
-    token
+    data : {
+        teacherToken : token, 
+        teacherInstituteNumber,
+         teacherEmail
+    }
    })
 
   }
