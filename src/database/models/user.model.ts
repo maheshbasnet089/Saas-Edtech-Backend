@@ -1,5 +1,6 @@
 
 import {Table,Column,Model,DataType, PrimaryKey} from "sequelize-typescript"
+import { UserRole } from "../../middleware/type"
 
 @Table({
     tableName : 'users', // uta gui ma dekiney name vayo(phpmyadminma)
@@ -35,7 +36,7 @@ class User extends Model{
         type : DataType.ENUM('teacher','institute','super-admin','student'), 
         defaultValue : 'student', 
     })
-    declare role:string
+    declare role:UserRole
 
     @Column({
         type : DataType.STRING

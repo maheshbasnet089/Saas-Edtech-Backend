@@ -4,6 +4,7 @@ import generateRandomInsituteNumber from "../../services/generateRandomInsituteN
 import { IExtendedRequest } from "../../middleware/type";
 import User from "../../database/models/user.model";
 import categories from "../../seed";
+import { QueryTypes } from "sequelize";
 
 
 
@@ -189,5 +190,23 @@ const createCategoryTable = async(req:IExtendedRequest,res:Response,next:NextFun
 }
 
 
+const createChapterLessonTable = async(req:IExtendedRequest,res:Response,next:NextFunction)=>{
+    const instituteNumber = req.user?.currentInstituteNumber 
+    await sequelize.query(`CREATE TABLE IF NOT EXISTS chapter_lesson_${instituteNumber}(
+        id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()), 
+        lessonName VARCHAR(255) NOT NULL, 
+        lessonDescription TEXT, 
+        lessonVideoUrl VARCHAR(200) NOT NULL, 
+        lessonThumbnailUrl VARCHAR(200) NOT NULL, 
+        chapterId VARCHAR(36) REFERENCES course_chapter_${instituteNumber}(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
-export  {createInstitute,createTeacherTable,createStudentTable,createCourseTable,createCategoryTable,createCourseChapterTable}
+        )`,{
+            type : QueryTypes.INSERT
+        })
+        next()
+}
+
+
+export  {createInstitute,createTeacherTable,createStudentTable,createChapterLessonTable,createCourseTable,createCategoryTable,createCourseChapterTable}

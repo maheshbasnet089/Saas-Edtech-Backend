@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import jwt from 'jsonwebtoken'
 import User from "../database/models/user.model"
-import { IExtendedRequest } from "./type"
+import { IExtendedRequest, UserRole } from "./type"
 
 const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>{
 
@@ -47,7 +47,7 @@ const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>
         //         }
         //     })
             const userData = await User.findByPk(resultaayo.id,{
-                attributes : ['id','currentInstituteNumber']
+                attributes : ['id','currentInstituteNumber', 'role']
             })
             /*
 
@@ -66,6 +66,20 @@ const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>
             }
         }
     })
+}
+
+const restrictTo = (...roles:UserRole[])=>{ // ["teacher","super-admin","institute"]
+    return (req:IExtendedRequest,res:Response,next:NextFunction)=>{
+        // requesting user ko role k xa tyo liney ani parameter aako role sanga match garne 
+        let userRole = req.user?.role as UserRole // teacher
+        if(roles.includes(userRole)){
+            next()
+        }else{
+            res.status(403).json({
+                message : "Invalid, you dont have access to this.."
+            })
+        }
+    }
 }
 
 // class Middleware{
@@ -115,4 +129,4 @@ const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>
 // }
 
 
-export default isLoggedIn
+export {isLoggedIn,restrictTo}
