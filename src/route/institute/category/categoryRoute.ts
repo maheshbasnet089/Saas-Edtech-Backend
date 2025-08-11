@@ -1,9 +1,9 @@
 
 
 import express, { Router } from 'express'
-import isLoggedIn from '../../../middleware/middleware';
 import { createCategory, deleteCategory, getCategories } from '../../../controller/institute/category/categoryController';
 import asyncErrorHandler from '../../../services/asyncErrorHandler';
+import { isLoggedIn } from '../../../middleware/middleware';
 
 const router:Router = express.Router()
 
