@@ -21,6 +21,7 @@ import User from "../../../database/models/user.model"
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 import generateJWTToken from "../../../services/generateJwtToken"
+import { UserRole } from "../../../middleware/type"
 // json data --> req.body // username,email,password 
 // files --> req.file // files
 // const registerUser = async (req:Request,res:Response)=>{
@@ -75,8 +76,8 @@ class AuthController{
         })
         return
     }
-    const {username,password,email} = req.body
-    if(!username || !password || !email){
+    const {username,password,email,type} = req.body
+    if(!username || !password || !email || !type){
       res.status(400).json({
          message : "Please provide username, password, email"
      })
@@ -94,7 +95,7 @@ class AuthController{
      await User.create({
          userName :username, 
          password : bcrypt.hashSync(password,12), //blowfish
-         email : email
+         email : email,
      })
      res.status(201).json({
          message : "User registered successfully"

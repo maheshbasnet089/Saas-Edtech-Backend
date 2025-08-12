@@ -7,7 +7,8 @@ import express, { Router } from "express"
 
 import { createCategoryTable, createChapterLessonTable, createCourseChapterTable, createCourseTable, createInstitute, createStudentTable, createTeacherTable } from "../../controller/institute/instituteController"
 import asyncErrorHandler from "../../services/asyncErrorHandler"
-import { isLoggedIn } from "../../middleware/middleware"
+import { isLoggedIn, restrictTo } from "../../middleware/middleware"
+import { UserRole } from "../../middleware/type"
 
 
 const router:Router = express.Router()
