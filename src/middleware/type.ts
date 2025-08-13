@@ -9,7 +9,7 @@ export enum UserRole{
 
 export interface IExtendedRequest extends Request{
        user ?: {
-       id : string,
+       id     : string,
        currentInstituteNumber ?: string | number | null, 
        role : UserRole
        }

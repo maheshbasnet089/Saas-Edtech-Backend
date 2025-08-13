@@ -29,7 +29,7 @@ const instituteListForStudent = async(req:Request,res:Response)=>{
 }
 const instituteCourseListForStudent = async(req:Request,res:Response)=>{
     const {instituteId} = req.params
-    const datas = await sequelize.query(`SELECT * FROM course_${instituteId} JOIN category_${instituteId} ON course_${instituteId}.categoryId = category_${instituteId}.id`,{
+    const datas = await sequelize.query(`SELECT co.id as courseId,co.courseName,co.courseDescription,co.coursePrice,cat.id,cat.categoryName FROM course_${instituteId} AS co JOIN category_${instituteId} AS cat ON co.categoryId = cat.id`,{
         type : QueryTypes.SELECT
     })
     console.log(datas.length)

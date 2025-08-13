@@ -10,6 +10,7 @@ import teacherRoute from './route/teacher/teacherRoute'
 import lessonRoute from './route/teacher/course/lessons/course-lesson'
 import chapterRoute from './route/teacher/course/chapters/course-chapter-router'
 import studentInstituteRoute from './route/student/institute/student-institute.route'
+import studentCartRoute from './route/student/cart/student-cart.route'
 
 import cors from 'cors'
 
@@ -18,7 +19,7 @@ app.use(express.json())
 
 // cors config 
 app.use(cors({
-    origin : ["http://localhost:3000","http://localhost:3001"]
+    origin : ["http://localhost:3003","http://localhost:3001"]
 }))
 //GLOBAL ROUTE
 app.use("/api/auth",authRoute)
@@ -37,5 +38,6 @@ app.use("/api/teacher/course",lessonRoute)
 
 // student route 
 app.use("/api/student",studentInstituteRoute)
+app.use('/api/student/',studentCartRoute)
 
 export default app

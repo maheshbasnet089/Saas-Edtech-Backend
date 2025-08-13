@@ -68,10 +68,24 @@ const isLoggedIn = async (req:IExtendedRequest,res:Response,next:NextFunction)=>
     })
 }
 
+
+const changeUserIdForTableName = (req:IExtendedRequest,res:Response,next:NextFunction)=>{
+    console.log(req.user,"Req user outside")
+    if(req.user && req.user.id){
+         const newUserId =  req.user.id.split("-").join("_") 
+         req.user = {id:newUserId,role:req.user.role}
+         console.log(req.user,"RequserId")
+        //  console.log(req.user?.id.split("-").join("_") ,"data")
+        next()
+        }
+
+}
+
 const restrictTo = (...roles:UserRole[])=>{ // ["teacher","super-admin","institute"]
     return (req:IExtendedRequest,res:Response,next:NextFunction)=>{
         // requesting user ko role k xa tyo liney ani parameter aako role sanga match garne 
         let userRole = req.user?.role as UserRole // teacher
+        console.log(req.user?.role,"restrict o")
         if(roles.includes(userRole)){
             next()
         }else{
@@ -129,4 +143,4 @@ const restrictTo = (...roles:UserRole[])=>{ // ["teacher","super-admin","institu
 // }
 
 
-export {isLoggedIn,restrictTo}
+export {isLoggedIn,restrictTo,changeUserIdForTableName}

@@ -76,8 +76,8 @@ class AuthController{
         })
         return
     }
-    const {username,password,email,type} = req.body
-    if(!username || !password || !email || !type){
+    const {username,password,email} = req.body
+    if(!username || !password || !email ){
       res.status(400).json({
          message : "Please provide username, password, email"
      })
