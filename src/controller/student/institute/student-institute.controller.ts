@@ -10,7 +10,7 @@ const instituteListForStudent = async(req:Request,res:Response)=>{
   const tables = await sequelize.query(`SHOW TABLES LIKE 'institute_%'`,{
     type : QueryTypes.SHOWTABLES
   })
-//   console.log(tables,"Tables")
+//   console.log(tables,"Tables") institute_111017, institute_123123
   let allDatas = []
  for(let table of tables){
     console.log(table)
