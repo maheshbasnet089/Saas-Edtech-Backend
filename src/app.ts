@@ -11,6 +11,7 @@ import lessonRoute from './route/teacher/course/lessons/course-lesson'
 import chapterRoute from './route/teacher/course/chapters/course-chapter-router'
 import studentInstituteRoute from './route/student/institute/student-institute.route'
 import studentCartRoute from './route/student/cart/student-cart.route'
+import studentCourseOrderRoute from './route/student/order/student-order.route'
 
 import cors from 'cors'
 
@@ -39,5 +40,6 @@ app.use("/api/teacher/course",lessonRoute)
 // student route 
 app.use("/api/student",studentInstituteRoute)
 app.use('/api/student/',studentCartRoute)
+app.use("/api/student",studentCourseOrderRoute)
 
 export default app
