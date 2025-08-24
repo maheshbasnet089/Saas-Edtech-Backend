@@ -6,6 +6,7 @@ import { Response } from "express";
 import { getSequelizeTypeByDesignType } from "sequelize-typescript";
 import { KhaltiPayment } from "./paymentIntegration";
 import axios from "axios";
+import generateSha256Hash from "../../../services/generateSha256Hash";
 
 // upload.fields([{ name: 'avatar1', maxCount: 1 }, {name:'avatar2', maxCount:1},{name:'avatar3', maxCount : 1}]
 
@@ -118,6 +119,31 @@ const createStudentCourseOrder = async(req:IExtendedRequest,res:Response)=>{
     
         let pidx; 
         if(paymentMethod === PaymentMethod.ESEWA){
+            const{amount,} = req.body
+            const paymentData = {
+                 tax_amount : 0,
+                 product_service_charge : 0,
+                 product_delivery_charge : 0 ,
+                 product_code : process.env.ESEWA_PRODUCT_CODE ,
+                 totalAmount : amount,
+                 transaction_uuid : orderDetailsData[0].courseId,
+                 success_url : "http://localhost:3000/", 
+                 failure_url  : "http://localhost:3000/failure", 
+                 signed_field_names : "total_amount,transaction_uuid,product_code"
+            }
+            const data = `total_amount=${paymentData.totalAmount},transaction_uuid=${paymentData.transaction_uuid},product_code=${paymentData.product_code}`
+            const esewaSecretKey = process.env.ESEWA_SECRET_KEY
+            const signature = generateSha256Hash(data,esewaSecretKey as string)
+
+           const response = await axios.post("https://rc-epay.esewa.com.np/api/epay/main/v2/form",{
+                ...paymentData, signature
+            },{
+                headers : {
+                    "Content-Type" : "application/x-www-form-urlencoded"
+                }
+            })
+
+            console.log(response)
 
             // esewa integration function call here 
         }else if(paymentMethod === PaymentMethod.KHALTI){

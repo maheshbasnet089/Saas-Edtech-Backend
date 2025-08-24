@@ -1,0 +1,26 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<h1>hello world</h1>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac-sha256.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/enc-base64.min.js"></script>
+<script>
+ var hash = CryptoJS.HmacSHA256("total_amount=200,transaction_uuid=11-201-13,product_code=EPAYTEST", "8gBm/:&EnhH.1/q");
+ var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+ document.write(hashInBase64);
+</script>
+ 
+</body>
+</html>
